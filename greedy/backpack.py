@@ -11,7 +11,7 @@ def main():
             item_list.append((value, volume, value/volume))
     capacity = float(capacity)
     result = 0.0
-    for value, item_volume, value_per_v in sorted(item_list, key=lambda x: x[0] / x[1], reverse=True):
+    for value, item_volume, value_per_v in sorted(item_list, key=lambda x: x[2], reverse=True):
         if item_volume < capacity:
             result += value
             capacity -= item_volume
