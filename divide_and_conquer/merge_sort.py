@@ -15,7 +15,7 @@ def merge(lst1, lst2, inverse_count=0):
         else:
             out.append(lst2[index2])
             index2 += 1
-            inverse_count += len(lst1[index1:])
+            inverse_count += end1 - index1
         if index1 == end1:
             out.extend(lst2[index2:])
             break
