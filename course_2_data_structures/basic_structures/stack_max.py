@@ -1,4 +1,5 @@
 import io
+from collections import namedtuple
 from typing import List
 
 
@@ -6,20 +7,21 @@ class EmptyStack(Exception):
     pass
 
 
-class Stack:
+StackValue = namedtuple('StackValue', ['value', 'maximum'])
+
+
+class MaxStack:
     __slots__ = ['array', 'max_array']
 
     def __init__(self) -> None:
-        self.array: List[int] = []
-        self.max_array: List[int] = []
+        self.array: List[StackValue] = []
 
     def pop(self) -> int:
         if not self.is_empty():
-            self.max_array.pop()
-            return self.array.pop()
+            return self.array.pop().value
         raise EmptyStack
 
-    def top(self) -> int:
+    def top(self) -> StackValue:
         if not self.is_empty():
             return self.array[-1]
         raise EmptyStack
@@ -28,21 +30,21 @@ class Stack:
         return not self.array
 
     def max(self) -> int:
-        return self.max_array[-1]
+        if not self.is_empty():
+            return self.array[-1].maximum
+        raise EmptyStack
 
     def push(self, value: int) -> None:
         if self.is_empty():
-            self.max_array.append(value)
-        elif value > self.max_array[-1]:
-            self.max_array.append(value)
+            maximum = value
         else:
-            self.max_array.append(self.max_array[-1])
-        self.array.append(value)
+            maximum = max(self.max(), value)
+        self.array.append(StackValue(value, maximum))
 
 
 def main(str_buffer):
     operation_num = int(next(str_buffer))
-    stack = Stack()
+    stack = MaxStack()
     out = []
     for _ in range(operation_num):
         operation = next(str_buffer).split()

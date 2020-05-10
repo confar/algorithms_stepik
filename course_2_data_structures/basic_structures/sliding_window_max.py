@@ -1,17 +1,6 @@
 import io
 
-
-class QueueElem:
-
-    def __init__(self, index, value):
-        self.index = index
-        self.value = value
-        self.next = None
-
-    def __str__(self) -> str:
-        return f'{self.index} value: {self.value}'
-
-    __repr__ = __str__
+from course_2_data_structures.basic_structures.stack_max import MaxStack, StackValue
 
 
 class Queue:
@@ -19,64 +8,42 @@ class Queue:
     def __init__(self, max_size):
         self.max_size = max_size
         self.current_size = 0
-        self.head = None
-        self.tail = None
-        self.max = None
-        self.second_max = None
+        self.to_push = MaxStack()
+        self.to_pop = MaxStack()
 
-    def push_back(self, elem):
-        if not self.head and not self.tail:
-            self.head = elem
-            self.tail = elem
+    def push_back(self, value):
+        if self.to_push.is_empty():
+            self.to_push.push(value)
         else:
-            current_tail = self.tail
-            current_tail.next = elem
-            self.tail = elem
-            if self.max and self.tail.value >= self.max:
-                self.second_max = self.max
-                self.max = self.tail.value
-            elif self.max and self.tail.value > self.second_max:
-                self.second_max = elem.value
+            maximum = max(self.to_push.max(), value)
+            self.to_push.array.append(StackValue(value, maximum=maximum))
         self.current_size += 1
 
     def pop_front(self):
-        current_head = self.head
-        if self.max == current_head.value:
-            self.max = self.second_max
-        elif self.second_max == current_head.value:
-            self.second_max = 0
-        next_head = current_head.next
-        self.head = next_head
+        if self.to_pop.is_empty():
+            while not self.to_push.is_empty():
+                elem = self.to_push.pop()
+                if not self.to_pop.is_empty():
+                    maximum = max(self.to_pop.max(), elem)
+                else:
+                    maximum = elem
+                self.to_pop.array.append(StackValue(elem, maximum))
+        self.to_pop.pop()
         self.current_size -= 1
-        if self.current_size == 0:
-            self.head = self.tail = self.max = None
 
     def __str__(self) -> str:
-        return f'Queue size {self.max_size} head {self.head} tail {self.tail}'
+        return f'Queue size {self.max_size} push {self.to_push} pop {self.to_pop.array}'
 
     __repr__ = __str__
 
     def get_max(self):
-        if self.max_size == 1:
-            return self.head.value
-        if not self.max:
-            if self.head.value > self.head.next.value:
-                maximum = self.head.value
-                second_maximum = self.head.next.value
-            else:
-                maximum = self.head.next.value
-                second_maximum = self.head.value
-            elem = self.head.next.next
-            for _ in range(self.max_size-2):
-                if elem.value >= maximum:
-                    second_maximum = maximum
-                    maximum = elem.value
-                elif elem.value > second_maximum:
-                    second_maximum = elem.value
-                elem = elem.next
-            self.max = maximum
-            self.second_max = second_maximum
-        return self.max
+        if self.to_push.is_empty():
+            maximum = self.to_pop.max()
+        elif self.to_pop.is_empty():
+            maximum = self.to_push.max()
+        else:
+            maximum = max(self.to_pop.max(), self.to_push.max())
+        return maximum
 
 
 tst1 = io.StringIO('''8
@@ -107,6 +74,14 @@ tst7 = io.StringIO('''15
 34 51 61 90 26 84 2 25 7 8 25 78 21 47 25
 3''')
 
+tst8 = io.StringIO('''15
+27 83 29 77 6 3 48 2 16 72 46 38 55 2 58
+5''')
+
+tst9 = io.StringIO('''3
+2 1 5
+2''')
+
 
 def main(str_buffer):
     (next(str_buffer))
@@ -115,20 +90,20 @@ def main(str_buffer):
     queue = Queue(max_size=max_size)
     out = []
     for index, value in enumerate(num_lst):
-        queue.push_back(QueueElem(index=index, value=value))
+        queue.push_back(value)
         if queue.current_size >= max_size:
             out.append(queue.get_max())
             queue.pop_front()
     return out
-    #return ' '.join(map(str, out))
 
 
 if __name__ == '__main__':
-    # assert main(tst1) == [7, 7, 5, 6, 6]
-    # assert main(tst2) == [2, 1, 5]
-    # assert main(tst3) == [9]
-    # assert main(tst4) == [73, 97, 97, 97, 97, 97, 97, 97, 42]
-    # assert main(tst5) == [93, 93, 93, 93]
-    # assert main(tst6) == [79, 79, 79, 79]
-    result = main(tst7) 
-    assert result == [61, 90, 90, 90, 84, 84, 25, 25, 25, 78, 78, 78, 47]
+    assert main(tst1) == [7, 7, 5, 6, 6]
+    assert main(tst2) == [2, 1, 5]
+    assert main(tst3) == [9]
+    assert main(tst4) == [73, 97, 97, 97, 97, 97, 97, 97, 42]
+    assert main(tst5) == [93, 93, 93, 93]
+    assert main(tst6) == [79, 79, 79, 79]
+    assert main(tst7) == [61, 90, 90, 90, 84, 84, 25, 25, 25, 78, 78, 78, 47]
+    assert main(tst8) == [83, 83, 77, 77, 48, 72, 72, 72, 72, 72, 58]
+    assert main(tst9) == [2, 5]
