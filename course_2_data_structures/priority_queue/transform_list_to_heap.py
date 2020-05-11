@@ -68,7 +68,7 @@ class Heap:
 
     def change_priority(self, index, new_priority):
         current_priority = self.heap[index]
-        self.heap[index] = current_priority
+        self.heap[index] = new_priority
         if new_priority > current_priority:
             self.sift_down(index)
         else:
