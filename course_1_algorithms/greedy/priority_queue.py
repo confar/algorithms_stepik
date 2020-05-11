@@ -87,7 +87,7 @@ def test1():
     h.extract_max()
     return h
 
+
 if __name__ == '__main__':
     assert test1().heap == [11, 9, 22, 8, 8, 18]
     main(f)
-
