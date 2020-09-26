@@ -2,7 +2,6 @@ import io
 
 
 class Tree:
-
     def __init__(self, size):
         self.array = [None for _ in range(size)]
         self.in_order_out = []
