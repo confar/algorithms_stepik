@@ -1,7 +1,6 @@
 import io
 from collections import Counter
 import operator
-import sys
 
 f = io.StringIO('5\n2 3 9 2 9')
 

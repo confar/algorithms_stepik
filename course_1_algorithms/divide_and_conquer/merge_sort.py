@@ -100,3 +100,5 @@ if __name__ == '__main__':
 
 
 
+# merge sort bottop up
+# quicksort sentinel = median(first, middle, last)
