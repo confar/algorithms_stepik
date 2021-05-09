@@ -1,9 +1,27 @@
+"""
+Первая строка входа содержит число операций 1 < n < 10^5.
+Каждая из последующих nn строк задают операцию одного из следующих двух типов:
+
+Insert x, где 0 < x < 10^9 — целое число;
+ExtractMax
+
+Первая операция добавляет число x в очередь с приоритетами, вторая — извлекает максимальное число и выводит его.
+"""
+
 import io
 
-f = io.StringIO('''4
+test2 = io.StringIO('''4
 Insert 3
 Insert 0
 ExtractMax
+ExtractMax''')
+
+test3 = io.StringIO('''6
+Insert 200
+Insert 10
+ExtractMax
+Insert 5
+Insert 500
 ExtractMax''')
 
 
@@ -52,24 +70,28 @@ class Heap:
         if len(self.heap) == 1:
             extract = self.heap.pop()
             print(extract)
+            return extract
         else:
             self.swap(0, -1)
             extract = self.heap.pop()
             print(extract)
             self.sift_down(0)
+            return extract
 
 
 def main(str_buffer):
     operation_num = int(next(str_buffer).strip())
     heap = Heap()
+    out = []
     for _ in range(operation_num):
         operation = next(str_buffer).strip().split(' ')
         if len(operation) == 1:
-            heap.extract_max()
+            out.append(heap.extract_max())
         else:
             operation, value = operation
             heap.insert(int(value))
     print(heap)
+    return out
 
 
 def test1():
@@ -89,5 +111,6 @@ def test1():
 
 
 if __name__ == '__main__':
-    assert test1().heap == [11, 9, 22, 8, 8, 18]
-    main(f)
+    assert test1().heap == [22, 11, 18, 9, 8, 8]
+    assert main(test2) == [3, 0]
+    assert main(test3) == [200, 500]

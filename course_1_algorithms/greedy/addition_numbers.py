@@ -1,7 +1,15 @@
+"""
+Различные слагаемые
+
+По данному числу 1 <= n <= 10^9 найдите максимальное число k,
+для которого n можно представить как сумму k различных натуральных слагаемых.
+Выведите в первой строке число k, во второй — k слагаемых.
+"""
+
 import io
 import itertools
 
-f = io.StringIO('461531907')
+test1 = io.StringIO('461531907')
 
 
 def main(str_buffer):
@@ -17,8 +25,11 @@ def main(str_buffer):
             num += out[-1]
             out[-1] = i
             num -= i
-    print(len(out))
+    length = len(out)
+    print(length)
     print(' '.join(str(i) for i in out))
+    return length
 
 
-main(f)
+if __name__ == "__main__":
+    assert main(test1) == 30381

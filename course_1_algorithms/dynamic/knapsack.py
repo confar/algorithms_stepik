@@ -1,7 +1,7 @@
 
 
 def knapsack(capacity, number_of_items, item_weights, item_values=None):
-    knapsack = [[0 for _ in range(capacity+1)] for _ in range(number_of_items+1)]
+    knapsack = [[0 for _ in range(capacity + 1)] for _ in range(number_of_items + 1)]
     if not item_values:
         item_values = item_weights[:]
     for item_idx in range(1, number_of_items+1):
