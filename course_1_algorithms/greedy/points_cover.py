@@ -54,9 +54,7 @@ def main(str_buffer):
         else:
             current_section = sorted_sections[0][1]
     len_output = len(output)
-    print(len_output)
     second_result = ' '.join((str(i) for i in output))
-    print(second_result)
     return len_output, output
 
 
