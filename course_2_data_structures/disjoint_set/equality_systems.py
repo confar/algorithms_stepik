@@ -6,7 +6,6 @@ class WrongInequality(Exception):
 
 
 class SystemEquations:
-
     def __init__(self, size):
         self.lst = [i for i in range(1, size+1)]
 
